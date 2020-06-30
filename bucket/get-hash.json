@@ -1,0 +1,17 @@
+{
+    "homepage": "https://github.com/wookiefriseur/valor-modulis/psmodules/Get-Hash",
+    "description": "Hash utility functions.",
+    "version": "1.0.0",
+    "license": "MIT",
+    "psmodule": {
+        "name": "Get-Hash"
+    },
+    "url": [
+        "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/feature/scoop/psmodules/Get-Hash/Get-Hash.psd1",
+        "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/feature/scoop/psmodules/Get-Hash/Get-Hash.psm1"
+    ],
+    "hash": [
+        "c6e94d856c761c692316d480c24a745b38ab03bd4a63285a0438d4ea7c995d95",
+        "93b8f59f624b1d3add379fc6e91e1be13bea4bac4b7eaffb4f057f4c9bf1a3ad"
+    ]
+}
