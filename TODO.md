@@ -1,7 +1,7 @@
 # Goals
 
 ## Modules
-- [ ] Hashing utilities
+- [X] Hashing utilities
 - [ ] URL utilities (data-url, urlescape)
 - [ ] REST Client
 - [ ] Date formatting and calculations
@@ -21,7 +21,7 @@
 - [ ] ...
 
 ## Repo Improvments
-- [ ] put each psmodule into a git submodule
+- [ ] put each psmodule into a git submodule if there is too many of them
 - [ ] installation script
 - [ ] scoop bucket
 - [ ] add tests
