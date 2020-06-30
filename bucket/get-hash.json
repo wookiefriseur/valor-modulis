@@ -7,11 +7,11 @@
         "name": "Get-Hash"
     },
     "url": [
-        "https://github.com/wookiefriseur/valor-modulis/raw/feature/scoop/psmodules/Get-Hash/Get-Hash.psd1",
-        "https://github.com/wookiefriseur/valor-modulis/raw/feature/scoop/psmodules/Get-Hash/Get-Hash.psm1"
+        "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/feature/scoop/psmodules/Get-Hash/Get-Hash.psd1",
+        "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/feature/scoop/psmodules/Get-Hash/Get-Hash.psm1"
     ],
     "hash": [
-        "f03ffd56f2bd3c7f0d91952bebf4855adef64232b5c0c49d75397a4b82c4c196",
-        "011886c841b3861fed325ee9ba73a1e304120611fe4f7a54f748e2c0608c4ec2"
+        "c6e94d856c761c692316d480c24a745b38ab03bd4a63285a0438d4ea7c995d95",
+        "93b8f59f624b1d3add379fc6e91e1be13bea4bac4b7eaffb4f057f4c9bf1a3ad"
     ]
 }

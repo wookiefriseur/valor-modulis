@@ -16,9 +16,9 @@
 
     # Dependencies
     RequiredAssemblies = @(
-        [System.Security.Cryptography.MD5CryptoServiceProvider].FullName,
-        [System.Security.Cryptography.SHA1CryptoServiceProvider].FullName,
-        [System.Security.Cryptography.SHA256Managed].FullName
+        'System.Security.Cryptography.MD5CryptoServiceProvider',
+        'System.Security.Cryptography.SHA1CryptoServiceProvider',
+        'System.Security.Cryptography.SHA256Managed'
     )
 
     PrivateData        = @{
