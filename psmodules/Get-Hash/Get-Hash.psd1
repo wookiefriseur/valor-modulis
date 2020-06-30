@@ -15,11 +15,7 @@
     AliasesToExport    = '*'
 
     # Dependencies
-    RequiredAssemblies = @(
-        'System.Security.Cryptography.MD5CryptoServiceProvider',
-        'System.Security.Cryptography.SHA1CryptoServiceProvider',
-        'System.Security.Cryptography.SHA256Managed'
-    )
+    #RequiredAssemblies = @()
 
     PrivateData        = @{
 

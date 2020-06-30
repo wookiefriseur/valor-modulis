@@ -22,8 +22,12 @@
 
 ## Repo Improvments
 - [ ] put each psmodule into a git submodule if there is too many of them
-- [ ] installation script
-- [ ] scoop bucket
+- [X] installation script -> done through scoop
+- [X] scoop bucket
 - [ ] add tests
 - [ ] see if a CI pipeline makes sense
+- [ ] automate generation and update of scoop manifest files
 - [ ] ...
+
+## Not planned
+* Releases, because only the latest versions of modules will be used
