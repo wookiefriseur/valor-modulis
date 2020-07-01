@@ -9,5 +9,9 @@
     "url": [
         "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/Get-Hash/Get-Hash.psd1",
         "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/Get-Hash/Get-Hash.psm1"
+    ],
+    "hash": [
+        "577d198751411ec2536816554d8271c1fc955f749a291c825595e5c91ac3cefe",
+        "93b8f59f624b1d3add379fc6e91e1be13bea4bac4b7eaffb4f057f4c9bf1a3ad"
     ]
 }
