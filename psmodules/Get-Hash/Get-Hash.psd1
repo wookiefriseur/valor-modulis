@@ -9,10 +9,10 @@
     Copyright          = 'Copyright (c) 2020 Matthäus Falkowski. MIT License.'
 
     # Exports
-    FunctionsToExport  = '*'
-    CmdletsToExport    = '*'
-    VariablesToExport  = '*'
-    AliasesToExport    = '*'
+    FunctionsToExport  = ''
+    CmdletsToExport    = 'Get-Hash'
+    VariablesToExport  = ''
+    AliasesToExport    = ''
 
     # Dependencies
     #RequiredAssemblies = @()
