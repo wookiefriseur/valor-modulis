@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/wookiefriseur/valor-modulis/badge)](https://www.codefactor.io/repository/github/wookiefriseur/valor-modulis)
+
 # About
 Collection of Powershell modules and scripts for everyday tasks. Use at your own risk.
 
