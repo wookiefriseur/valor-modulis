@@ -26,8 +26,9 @@
 - [X] scoop bucket
 - [ ] add tests
 - [ ] see if a CI pipeline makes sense
-- [ ] automate generation and update of scoop manifest files
+- [ ] automate generation of scoop manifest files
+- [X] automate update of scoop manifest files
 - [ ] ...
 
 ## Not planned
-* Releases, because only the latest versions of modules will be used
+* Releases as Scoop versioning, because each manifest file has its own version
