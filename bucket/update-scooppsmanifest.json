@@ -1,0 +1,17 @@
+{
+  "homepage": "https://github.com/wookiefriseur/valor-modulis/psmodules/Update-ScoopPSManifest",
+  "description": "Update Scoop bucket manifest with info from ps module manifest (WIP)",
+  "version": "0.1.0",
+  "license": "MIT",
+  "psmodule": {
+    "name": "Update-ScoopPSManifest"
+  },
+  "url": [
+    "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/Update-ScoopPSManifest/Update-ScoopPSManifest.psd1",
+    "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/Update-ScoopPSManifest/Update-ScoopPSManifest.psm1"
+  ],
+  "hash": [
+    "abc212700bd7a6c931e643f633e1eaefc88c72ecb396fb34545518259f858f05",
+    "082cd3be2c7fd7aed3e3d736cfe5e639e57fc8d46f3fe54ac25f1cdfa3e7cafe"
+  ]
+}
