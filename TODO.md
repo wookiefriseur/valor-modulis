@@ -2,7 +2,7 @@
 
 ## Modules
 - [X] Hashing utilities
-- [ ] URL utilities (data-url, urlescape)
+- [X] URL utilities (data-url, urlescape)
 - [ ] REST Client
 - [ ] Date formatting and calculations
 - [ ] String utils (search, replace, etc)

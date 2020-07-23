@@ -1,0 +1,17 @@
+{
+  "homepage": "https://github.com/wookiefriseur/valor-modulis/psmodules/UrlUtils",
+  "description": "URL Utilities like Base64 conversion, URL encoding and working with Data URLs",
+  "version": "1.0.0",
+  "license": "MIT",
+  "psmodule": {
+    "name": "UrlUtils"
+  },
+  "url": [
+    "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/UrlUtils/UrlUtils.psd1",
+    "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/UrlUtils/UrlUtils.psm1"
+  ],
+  "hash": [
+    "4d61b847951a385594167c752c36bfab6938f048c0d5483a37be51bf389c3449",
+    "af45372d6fc4f9e91b51b15f32e9b9c04e26cceb0371e536b6ebb997c149ebfb"
+  ]
+}
