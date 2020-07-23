@@ -1,0 +1,17 @@
+{
+    "homepage": "https://github.com/wookiefriseur/valor-modulis/psmodules/UrlUtils",
+    "description": "URL string utilities.",
+    "version": "0.0.1",
+    "license": "MIT",
+    "psmodule": {
+        "name": "UrlUtils"
+    },
+    "url": [
+        "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/UrlUtils/UrlUtils.psd1",
+        "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/UrlUtils/UrlUtils.psm1"
+    ],
+    "hash": [
+        "a",
+        "b"
+    ]
+}
