@@ -71,11 +71,6 @@ function ConvertFrom-Binary {
 .DESCRIPTION
     Returns a binary representation of a number from a decimal input.
 
-        "ConvertFrom-Octal",
-        "ConvertTo-Octal",
-        "ConvertFrom-Hexadecimal",
-        "ConvertTo-Hexadecimal"
-
 .EXAMPLE
     ConvertTo-Binary -Value 42 -Prefixed -NoGrouping
 
@@ -86,13 +81,13 @@ function ConvertFrom-Binary {
     ConvertTo-Binary 42
 
 .EXAMPLE
-    ConvertTo-Binary "0d42"
+    ConvertTo-Binary 0d42
 
 .EXAMPLE
     "42" | ConvertTo-Binary
 
 .EXAMPLE
-    @("42", 42, "0d42") | ConvertTo-Binary
+    @(42, 42, 0d42) | ConvertTo-Binary
 #>
 function ConvertTo-Binary {
     [CmdletBinding()]
@@ -113,11 +108,11 @@ function ConvertTo-Binary {
     begin {
 
         function getDecimal {
-            return [System.Convert]::ToDecimal( ($Value -replace "0d", ""), 10)
+            return [System.Convert]::ToDecimal( ($Value -replace "0d", ""))
         }
 
         function toBinaryString {
-            $result = [System.Convert]::ToString($Value, 2)
+            $result = [System.Convert]::ToString( (getDecimal), 2)
 
             if (-Not $NoGrouping) {
                 $groups = ($result.PadLeft([decimal]::Ceiling($result.Length / 4) * 4, "0") -split "(\d{4})")
