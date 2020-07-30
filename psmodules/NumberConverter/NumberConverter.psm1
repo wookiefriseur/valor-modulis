@@ -84,10 +84,10 @@ function ConvertFrom-Binary {
     ConvertTo-Binary 0d42
 
 .EXAMPLE
-    "42" | ConvertTo-Binary
+    42 | ConvertTo-Binary
 
 .EXAMPLE
-    @(42, 42, 0d42) | ConvertTo-Binary
+    @(42, -42, "0d42") | ConvertTo-Binary
 #>
 function ConvertTo-Binary {
     [CmdletBinding()]
@@ -158,10 +158,10 @@ function ConvertTo-Binary {
     ConvertFrom-Octal 0o52
 
 .EXAMPLE
-    "052" | ConvertFrom-Octal
+    052 | ConvertFrom-Octal
 
 .EXAMPLE
-    @("052", 52, "0o052") | ConvertFrom-Octal
+    @(052, 52, "0o052") | ConvertFrom-Octal
 #>
 function ConvertFrom-Octal {
     [CmdletBinding()]
@@ -177,12 +177,12 @@ function ConvertFrom-Octal {
 
     begin {
 
-        function getBinaryString {
+        function getOctalString {
             return $Value -replace "(0o)|\s", ""
         }
 
         function toInt {
-            return [System.Convert]::"To$Format"( (getBinaryString), 8)
+            return [System.Convert]::"To$Format"( (getOctalString), 8)
         }
 
     }
