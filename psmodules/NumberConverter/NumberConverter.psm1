@@ -62,3 +62,80 @@ function ConvertFrom-Binary {
     end {
     }
 }
+
+
+<#
+.SYNOPSIS
+   Convert a number from decimal to binary format.
+
+.DESCRIPTION
+    Returns a binary representation of a number from a decimal input.
+
+        "ConvertFrom-Octal",
+        "ConvertTo-Octal",
+        "ConvertFrom-Hexadecimal",
+        "ConvertTo-Hexadecimal"
+
+.EXAMPLE
+    ConvertTo-Binary -Value 42 -Prefixed -NoGrouping
+
+.EXAMPLE
+    ConvertTo-Binary -Value 42
+
+.EXAMPLE
+    ConvertTo-Binary 42
+
+.EXAMPLE
+    ConvertTo-Binary "0d42"
+
+.EXAMPLE
+    "42" | ConvertTo-Binary
+
+.EXAMPLE
+    @("42", 42, "0d42") | ConvertTo-Binary
+#>
+function ConvertTo-Binary {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory, Position = 1, ValueFromPipeline = $true)]
+        [System.String]
+        $Value,
+        # Activate prefix '0b'
+        [switch]
+        [bool]
+        $Prefixed,
+        # Disable spaces between groups of 4
+        [switch]
+        [bool]
+        $NoGrouping
+    )
+
+    begin {
+
+        function getDecimal {
+            return [System.Convert]::ToDecimal( ($Value -replace "0d", ""), 10)
+        }
+
+        function toBinaryString {
+            $result = [System.Convert]::ToString($Value, 2)
+
+            if (-Not $NoGrouping) {
+                $groups = ($result.PadLeft([decimal]::Ceiling($result.Length / 4) * 4, "0") -split "(\d{4})")
+                $result = ($groups | Join-String -Separator " ")
+            }
+
+            if ($Prefixed) { $result = "0b$result" }
+
+            return $result
+        }
+
+    }
+
+    process {
+
+        toBinaryString
+    }
+
+    end {
+    }
+}
