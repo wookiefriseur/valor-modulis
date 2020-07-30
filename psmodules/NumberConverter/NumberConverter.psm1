@@ -107,12 +107,8 @@ function ConvertTo-Binary {
 
     begin {
 
-        function getDecimal {
-            return [System.Convert]::ToDecimal( ($Value -replace "0d", ""))
-        }
-
         function toBinaryString {
-            $result = [System.Convert]::ToString( (getDecimal), 2)
+            $result = [System.Convert]::ToString( (getDecimal $Value), 2)
 
             if (-Not $NoGrouping) {
                 $groups = ($result.PadLeft([decimal]::Ceiling($result.Length / 4) * 4, "0") -split "(\d{4})")
@@ -133,4 +129,9 @@ function ConvertTo-Binary {
 
     end {
     }
+}
+
+<# Private helper functions for the module #>
+function getDecimal([string] $decimalString) {
+    return [System.Convert]::ToDecimal( ($decimalString -replace "0d", ""))
 }
