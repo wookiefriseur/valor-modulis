@@ -1,0 +1,17 @@
+{
+  "homepage": "https://github.com/wookiefriseur/valor-modulis/psmodules/NumberConverter",
+  "description": "Convert and format numbers to and from widely used bases: binary, octal, hexadecimal",
+  "version": "1.0.0",
+  "license": "MIT",
+  "psmodule": {
+    "name": "NumberConverter"
+  },
+  "url": [
+    "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/NumberConverter/NumberConverter.psd1",
+    "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/NumberConverter/NumberConverter.psm1"
+  ],
+  "hash": [
+    "f39fbb3b6cf2309bd5503bd2dd4c18339097b1aacbe7bb7094c8115d25bd891f",
+    "11b806f4930ef862cb1b293ce924513b92a2f88c23b55c2e1b17e5d5b5f9c58a"
+  ]
+}
