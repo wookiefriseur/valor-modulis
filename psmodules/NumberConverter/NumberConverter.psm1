@@ -263,6 +263,144 @@ function ConvertTo-Octal {
     }
 }
 
+<#
+.SYNOPSIS
+   Convert a number from hexadecimal to decimal format.
+
+.DESCRIPTION
+    Returns a decimal representation of a number from a hexadecimal input.
+    It is assumed that the input is unsigned and Int64 by default.
+
+.EXAMPLE
+    ConvertFrom-Hexadecimal -Value 2a
+
+.EXAMPLE
+    ConvertFrom-Hexadecimal -Format Int64 -Value 2A
+
+.EXAMPLE
+    ConvertFrom-Hexadecimal -Format Int16 -Value "FF D6"
+
+.EXAMPLE
+    ConvertFrom-Hexadecimal -Format UInt16 -Value "FF D6"
+
+.EXAMPLE
+    ConvertFrom-Hexadecimal 2a
+
+.EXAMPLE
+    ConvertFrom-Hexadecimal 0x2a
+
+.EXAMPLE
+    2a | ConvertFrom-Hexadecimal
+
+.EXAMPLE
+    @(2a, 0x2a, 2A) | ConvertFrom-Hexadecimal
+#>
+function ConvertFrom-Hexadecimal {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory, Position = 1, ValueFromPipeline = $true)]
+        [System.String]
+        $Value,
+        # Target format of the conversion
+        [ValidateSet("Int16", "Int32", "Int64", "UInt16", "UInt32", "UInt64")]
+        [System.String]
+        $Format = "UInt64"
+    )
+
+    begin {
+
+        function getHexadecimalString {
+            return ($Value -replace "(0x)|\s", "").ToLower()
+        }
+
+        function toInt {
+            return [System.Convert]::"To$Format"( (getHexadecimalString), 16)
+        }
+
+    }
+
+    process {
+
+        toInt
+    }
+
+    end {
+    }
+}
+
+<#
+.SYNOPSIS
+   Convert a number from decimal to hexadecimal format.
+
+.DESCRIPTION
+    Returns a hexadecimal representation of a number from a decimal input.
+
+.EXAMPLE
+    ConvertTo-Hexadecimal -Value 42 -Prefixed -NoGrouping -Uppercase
+
+.EXAMPLE
+    ConvertTo-Hexadecimal -Value 42
+
+.EXAMPLE
+    ConvertTo-Hexadecimal 42 -Uppercase
+
+.EXAMPLE
+    ConvertTo-Hexadecimal "0d42"
+
+.EXAMPLE
+    "42" | ConvertTo-Hexadecimal
+
+.EXAMPLE
+    @("42", 42, "0d42") | ConvertTo-Hexadecimal
+#>
+function ConvertTo-Hexadecimal {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory, Position = 1, ValueFromPipeline = $true)]
+        [System.String]
+        $Value,
+        # Activate prefix '0o'
+        [switch]
+        [bool]
+        $Prefixed,
+        # Disable spaces between groups of 2
+        [switch]
+        [bool]
+        $NoGrouping,
+        # Enable uppercase for Hex-Letters
+        [switch]
+        [bool]
+        $Uppercase
+    )
+
+    begin {
+
+        function toHexadecimalString {
+            $result = [System.Convert]::ToString( (getDecimal $Value), 16)
+
+            if (-Not $NoGrouping) {
+                $groups = ($result.PadLeft([decimal]::Ceiling($result.Length / 2) * 2, "0") -split "(\d{2})")
+                $result = ($groups | Join-String -Separator " ")
+            }
+
+            if($Uppercase) { $result = $result.ToUpper() }
+
+            if ($Prefixed) { $result = "0x$result" }
+
+            return $result
+        }
+
+    }
+
+    process {
+
+        toHexadecimalString
+    }
+
+    end {
+    }
+}
+
 
 <# Private helper functions for the module #>
 function getDecimal([string] $decimalString) {
