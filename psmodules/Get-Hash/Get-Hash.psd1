@@ -1,6 +1,6 @@
 @{
     RootModule        = 'Get-Hash.psm1'
-    ModuleVersion     = '1.0.1'
+    ModuleVersion     = '1.1.0'
     Description       = 'Offers utility commandlets for generating hashes'
 
     GUID              = 'd470a933-496d-44b7-b5c2-e614c9046332'

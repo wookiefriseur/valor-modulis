@@ -21,9 +21,9 @@
 function Get-Hash {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory, Position = 1, ValueFromPipeline = $true)]
+        [Parameter(Position = 1, ValueFromPipeline = $true)]
         [System.String]
-        $Text
+        $Text = ""
         ,
         # Set of currently supported hashing algorithms
         [ValidateSet("SHA1", "SHA256", "MD5")]
