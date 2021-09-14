@@ -6,7 +6,7 @@
 - [ ] REST Client
 - [ ] Date formatting and calculations
 - [ ] String utils (search, replace, etc)
-- [ ] Convert utils (base64, binary, hex)
+- [X] Convert utils (base64, binary, hex)
 - [ ] Download helper
 - [ ] Duplicate files
 - [ ] csv parsing utility
@@ -28,6 +28,7 @@
 - [ ] see if a CI pipeline makes sense
 - [ ] automate generation of scoop manifest files
 - [X] automate update of scoop manifest files
+- [ ] move TODO.md to issues instead
 - [ ] ...
 
 ## Not planned
