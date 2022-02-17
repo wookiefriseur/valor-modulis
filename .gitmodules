@@ -1,0 +1,3 @@
+[submodule "psmodules/NumberConverter"]
+	path = psmodules/NumberConverter
+	url = https://github.com/wookiefriseur/ps_numberconverter.git
