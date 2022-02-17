@@ -1,17 +1,17 @@
 {
-  "homepage": "https://github.com/wookiefriseur/valor-modulis/psmodules/UrlUtils",
+  "license": "Copyright (c) 2022 Matthäus Falkowski. MIT License.",
   "description": "URL Utilities like Base64 conversion, URL encoding and working with Data URLs",
-  "version": "1.0.1",
-  "license": "MIT",
+  "url": [
+    "https://github.com/wookiefriseur/ps_urlutils/raw/main/UrlUtils.psd1",
+    "https://github.com/wookiefriseur/ps_urlutils/raw/main/UrlUtils.psm1"
+  ],
+  "version": "1.0.2",
+  "homepage": "https://github.com/wookiefriseur/ps_urlutils",
   "psmodule": {
     "name": "UrlUtils"
   },
-  "url": [
-    "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/UrlUtils/UrlUtils.psd1",
-    "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/UrlUtils/UrlUtils.psm1"
-  ],
   "hash": [
-    "307baba7539066143bcd12c072351b32f0c487381a0726a96bd2dc70cceb7526",
+    "7e94c181286b03291106afdd5486198d7fd98abab7c4e185d365a98ca8d58c43",
     "a1aa316164185a8fbea4df021f721f7cdde366fb554f03dd76257418c812bf04"
   ]
 }
