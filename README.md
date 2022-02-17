@@ -6,18 +6,15 @@ Collection of Powershell modules and scripts for everyday tasks. Use at your own
 # Installation
 
 ## Using Scoop
-Add this repository as a bucket:
-`scoop bucket add valor-modulis https://github.com/wookiefriseur/valor-modulis`
 
-Install a module:
-`scoop install HashUtils`
-
-You can specify the bucket so scoop knows what to install exactly:
-`scoop install valor-modulis/HashUtils`
-
-It is symlinked automatically to a scoop directory that is in `$ENV:PSModulePath`.
-Autoimport should work when you try to use a function (for instance `Get-Hash "Hallo"`).
-If it does not work automatically, try to use `Import-Module Get-Hash`.
+* add this repository as a bucket
+    * `scoop bucket add valor-modulis https://github.com/wookiefriseur/valor-modulis`
+* install a module
+    * `scoop install HashUtils`
+    * `scoop install valor-modulis/HashUtils` (optional: specify bucket)
+* the module is automatically symlinked to a scoop directory in `$ENV:PSModulePath`
+    * autoimport should trigger when you try to use a function from a module (for instance `Get-Hash "Hallo"`)
+    * try to use `Import-Module HashUtils` if autoimport fails
 
 ### If you don't have Scoop yet
 ```powershell
@@ -28,7 +25,7 @@ Set-Executionpolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ## Manually
 After cloning the repository you can add the functions to the current terminal session through:
 * dot sourcing: `. script.ps1`
-* import if it's a module: `Import-Module Module-Name.psm1`
+* import if it's a module: `Import-Module ModuleName.psm1`
 
 For persistent scripts, load them in your psprofile.
 For automatic module import, put it into one of your `$ENV:PSModulePath`.
@@ -38,11 +35,14 @@ Use prefixes in case of naming conflicts.
 # Uninstalling
 
 ## Scoop
-Uninstall providing the Module name.
-`scoop uninstall Get-Hash`
 
-If you want to also get rid of the bucket:
-`scoop bucket rm valor-modulis`
+* Uninstall providing the Module name:
+    * `scoop uninstall Get-Hash`
+    * `scoop uninstall valor-modulis/Get-Hash` (optional: specify bucket)
+* bucket can be removed as follows:
+    * `scoop bucket rm valor-modulis`
 
 ## Manually
-`Remove-Module Get-Hash`
+
+* `Remove-Module Get-Hash` (this will only unload a module)
+* uninstall it in scoop for a more permanent solution
