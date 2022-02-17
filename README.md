@@ -10,7 +10,10 @@ Add this repository as a bucket:
 `scoop bucket add valor-modulis https://github.com/wookiefriseur/valor-modulis`
 
 Install a module:
-`scoop install Get-Hash`
+`scoop install HashUtils`
+
+You can specify the bucket so scoop knows what to install exactly:
+`scoop install valor-modulis/HashUtils`
 
 It is symlinked automatically to a scoop directory that is in `$ENV:PSModulePath`.
 Autoimport should work when you try to use a function (for instance `Get-Hash "Hallo"`).

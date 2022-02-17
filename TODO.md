@@ -21,15 +21,16 @@
 - [ ] ...
 
 ## Repo Improvments
-- [ ] put each psmodule into a git submodule if there is too many of them
+- [x] put each psmodule into a git submodule if there is too many of them
 - [X] installation script -> done through scoop
 - [X] scoop bucket
 - [ ] add tests
 - [ ] see if a CI pipeline makes sense
-- [ ] automate generation of scoop manifest files
+- [x] automate generation of scoop manifest files
 - [X] automate update of scoop manifest files
 - [ ] move TODO.md to issues instead
 - [ ] ...
 
 ## Not planned
-* Releases as Scoop versioning, because each manifest file has its own version
+
+* Releases as Scoop versioning, because it would be too much work. If you need older versions you can use the repository
