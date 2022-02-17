@@ -2,8 +2,8 @@
   "license": "Copyright (c) 2022 Matthäus Falkowski. MIT License.",
   "description": "Offers utility commandlets for hashing",
   "url": [
-    "https://github.com/wookiefriseur/valor-modulis/raw/master/psmodules/HashUtils/HashUtils.psd1",
-    "https://github.com/wookiefriseur/valor-modulis/raw/master/psmodules/HashUtils/HashUtils.psm1"
+    "https://github.com/wookiefriseur/ps_hashutils/raw/main/HashUtils.psd1",
+    "https://github.com/wookiefriseur/ps_hashutils/raw/main/HashUtils.psm1"
   ],
   "version": "2.0.0",
   "homepage": "https://github.com/wookiefriseur/ps_hashutils",

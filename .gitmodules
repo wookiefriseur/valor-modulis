@@ -4,3 +4,6 @@
 [submodule "psmodules/UrlUtils"]
 	path = psmodules/UrlUtils
 	url = https://github.com/wookiefriseur/ps_urlutils.git
+[submodule "psmodules/HashUtils"]
+	path = psmodules/HashUtils
+	url = https://github.com/wookiefriseur/ps_hashutils.git
