@@ -28,14 +28,17 @@ function Update-ScoopPSManifest {
         $ScoopManifestDir
         ,
         # Whether to reformat newlines in PSModule files
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [Switch]
         $NoNewlineReplace
     )
 
     begin {
+        $PSManifestDir = (Resolve-Path $PSManifestDir) -replace '[\\/]$', ''
+        $ScoopManifestDir = (Resolve-Path $ScoopManifestDir) -replace '[\\/]$', ''
+        Write-Verbose "Inputs:`n$($PSManifestDir)`n$($ScoopManifestDir)"
         $psManifestFile = (Get-ChildItem -Path $PSManifestDir -Filter  *.psd1)[0]
-        $scoopManifestFile = "$ScoopManifestDir\$($psManifestFile.BaseName).json";
+        $scoopManifestFile = "$ScoopManifestDir\$($psManifestFile.BaseName.ToLower()).json";
 
         # Reformat module files to newline=lf
         function ReplaceNewlines {
@@ -53,35 +56,55 @@ function Update-ScoopPSManifest {
         }
 
         # Pass only relevant information from the PS Manifest
-        function GetInfoFromPSManifest {
+        function ParseInfoFromManifest {
             $parsed = Import-PowerShellDataFile $psManifestFile
-            return @{version=$parsed.ModuleVersion; description=$parsed.Description}
-        }
-
-        # Scoop manifest must have the same name like the directory of the module
-        function GetInfoFromScoopManifest {
-            return ((Get-Content -Raw "$ScoopManifestDir\$($psManifestFile.BaseName).json") | ConvertFrom-Json)
+            $result = @{
+                'homepage'    = "$($parsed.PrivateData.PSData.ProjectUri -replace '/$', '')"
+                'description' = "$($parsed.Description)"
+                'version'     = "$($parsed.ModuleVersion)"
+                'license'     = "$($parsed.Copyright)"
+            }
+            Write-Verbose "Parsed from PSManifest:`n$($result | ConvertTo-Json)"
+            return $result
         }
 
         function UpdateScoopManifest {
             ReplaceNewlines
-            $psManifest = GetInfoFromPSManifest
-            $scoopManifest = GetInfoFromScoopManifest
+            $scoopManifest = @{
+                'homepage'    = ''
+                'description' = ''
+                'version'     = ''
+                'license'     = ''
+                'psmodule'    = @{
+                    'name' = ''
+                }
+                'url'         = @()
+                'hash'        = @()
+            }
+            $psManifest = ParseInfoFromManifest
 
-            $scoopManifest.version = $psManifest.version
+            $scoopManifest.homepage = $psManifest.homepage
             $scoopManifest.description = $psManifest.description
+            $scoopManifest.version = $psManifest.version
+            $scoopManifest.license = $psManifest.license
+            $scoopManifest.psmodule.name = $psManifestFile.BaseName
 
-            for ($i = 0; $i -lt $scoopManifest.url.Count; $i++) {
-                $scoopManifest.url[$i] -match '\/(?<Name>[\w\-]+\.\w+$)' > $null
-                $file = $Matches.Name
-                $scoopManifest.hash[$i] = (Get-FileHash "$PSManifestDir\$file").Hash.ToLower()
+            # "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/NumberConverter/NumberConverter.psd1",
+            foreach ($file in (Get-ChildItem -Recurse -Path $PSManifestDir -File)) {
+                $fileHash = (Get-FileHash $file).Hash.ToLower()
+                $scoopManifest.hash += $fileHash
+                $baseFileDir = $file.Directory.FullName.Replace($PSManifestDir, '').Replace('\', '/')
+                $fileUrl = "$($scoopManifest.homepage)/raw/main$baseFileDir/$($file.BaseName)$($file.Extension)"
+                # Example: https://github.com/wookiefriseur/ps_numberconverter/raw/main/NumberConverter.psd1
+                $scoopManifest.url += $fileUrl
+
+                Write-Verbose "Generating hash and url for $($file):`n$($fileHash)`n$($fileUrl)"
             }
 
             $scoopManifestJson = ($scoopManifest | ConvertTo-Json).Replace("`r`n", "`n")
-            Write-Verbose -Message "Scoop manifest before:`n$(Get-Content -Raw $scoopManifestFile)"
-            Write-Verbose -Message "Scoop manifest after:`n$scoopManifestJson"
+            Write-Verbose -Message "Creating scoop manifest for $($scoopManifest.name)"
             if ($PSCmdlet.ShouldProcess($scoopManifestFile, "Create/Overwrite file")) {
-                New-Item -Force -Path $scoopManifestFile -Value "$scoopManifestJson`n"
+                New-Item -Force -Path $scoopManifestFile -Value "$scoopManifestJson`n" > $null
             }
         }
     }
