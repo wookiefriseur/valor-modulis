@@ -10,7 +10,9 @@
 .EXAMPLE
     Update-ScoopPSManifest -PSManifestDir ".\psmodules\Get-Hash\" -ScoopManifestDir ".\bucket\"
 .EXAMPLE
-    Update-ScoopPSManifest -PSManifestDir ".\psmodules\Get-Hash\" -ScoopManifestDir ".\bucket\" -Verbose -WhatIf
+    Update-ScoopPSManifest -ScoopManifestDir ".\bucket\" -PSManifestDir ".\psmodules\Get-Hash\" -Verbose -WhatIf
+.EXAMPLE
+    Update-ScoopPSManifest -PSManifestDir ".\psmodules\Get-Hash\" -ScoopManifestDir ".\bucket\" -NoNewlineReplace
 #>
 function Update-ScoopPSManifest {
     [CmdletBinding(SupportsShouldProcess)]
@@ -24,11 +26,31 @@ function Update-ScoopPSManifest {
         [Parameter(Mandatory, Position = 2, ValueFromPipeline = $true)]
         [System.String]
         $ScoopManifestDir
+        ,
+        # Whether to reformat newlines in PSModule files
+        [Parameter(Mandatory=$false)]
+        [Switch]
+        $NoNewlineReplace
     )
 
     begin {
         $psManifestFile = (Get-ChildItem -Path $PSManifestDir -Filter  *.psd1)[0]
         $scoopManifestFile = "$ScoopManifestDir\$($psManifestFile.BaseName).json";
+
+        # Reformat module files to newline=lf
+        function ReplaceNewlines {
+            if ($NoNewlineReplace) { return }
+
+            $psFiles = (Get-ChildItem -Path $PSManifestDir -Recurse -Filter *.ps*1 -ErrorAction SilentlyContinue)
+            $psFiles = $psFiles | Where-Object { $_.Extension -eq '.psd1' -or $_.Extension -eq '.psm1' }
+            foreach ($psFile in $psFiles) {
+                if ($PSCmdlet.ShouldProcess($psFile, "Edit file")) {
+                    Write-Verbose "Replacing cr+lf in $($psFile.Name)"
+                    $fileContent = (Get-Content -Path $psFile -Encoding utf8 -Raw).Replace("`r`n", "`n")
+                    New-Item -Force -Path $psFile -Value $fileContent > $null
+                }
+            }
+        }
 
         # Pass only relevant information from the PS Manifest
         function GetInfoFromPSManifest {
@@ -42,6 +64,7 @@ function Update-ScoopPSManifest {
         }
 
         function UpdateScoopManifest {
+            ReplaceNewlines
             $psManifest = GetInfoFromPSManifest
             $scoopManifest = GetInfoFromScoopManifest
 
@@ -49,16 +72,16 @@ function Update-ScoopPSManifest {
             $scoopManifest.description = $psManifest.description
 
             for ($i = 0; $i -lt $scoopManifest.url.Count; $i++) {
-                $scoopManifest.url[$i] -match '\/(?<Name>[\w\-]+\.\w+$)' > $NULL
+                $scoopManifest.url[$i] -match '\/(?<Name>[\w\-]+\.\w+$)' > $null
                 $file = $Matches.Name
                 $scoopManifest.hash[$i] = (Get-FileHash "$PSManifestDir\$file").Hash.ToLower()
             }
 
-            $scoopManifestJson = ($scoopManifest | ConvertTo-Json)
+            $scoopManifestJson = ($scoopManifest | ConvertTo-Json).Replace("`r`n", "`n")
             Write-Verbose -Message "Scoop manifest before:`n$(Get-Content -Raw $scoopManifestFile)"
             Write-Verbose -Message "Scoop manifest after:`n$scoopManifestJson"
-            if ($PSCmdlet.ShouldProcess($scoopManifestFile, "Overwrite")) {
-                New-Item -Force -Path $scoopManifestFile -Value $scoopManifestJson
+            if ($PSCmdlet.ShouldProcess($scoopManifestFile, "Create/Overwrite file")) {
+                New-Item -Force -Path $scoopManifestFile -Value "$scoopManifestJson`n"
             }
         }
     }
