@@ -7,9 +7,13 @@
     Generates normalised file hashes (with LF line endings).
 
 .EXAMPLE
-    Update-ScoopPSManifest -PSManifestDir ".\psmodules\Get-Hash\" -ScoopManifestDir ".\bucket\"
+    Update-ScoopPSManifest ".\psmodules\Get-Hash\" ".\bucket\"
 .EXAMPLE
-    Update-ScoopPSManifest -PSManifestDir ".\psmodules\Get-Hash\" -ScoopManifestDir ".\bucket\" -Verbose -WhatIf
+    Update-ScoopPSManifest -ScoopManifestDir ".\bucket\" -PSManifestDir ".\psmodules\Get-Hash\"
+.EXAMPLE
+    Update-ScoopPSManifest -ScoopManifestDir ".\bucket\" -PSManifestDir ".\psmodules\Get-Hash\" -ScoopManifestPrefix "xxx_"
+.EXAMPLE
+    Update-ScoopPSManifest -ScoopManifestDir ".\bucket\" -PSManifestDir ".\psmodules\Get-Hash\" -Verbose -WhatIf
 #>
 function Update-ScoopPSManifest {
     [CmdletBinding(SupportsShouldProcess)]
@@ -23,6 +27,11 @@ function Update-ScoopPSManifest {
         [Parameter(Mandatory, Position = 2, ValueFromPipeline = $true)]
         [System.String]
         $ScoopManifestDir
+        ,
+        # Prefix of the scoop manifest json (json name will be the application name in scoop)
+        [Parameter(Position = 3)]
+        [System.String]
+        $ScoopManifestPrefix = "vm_"
     )
 
     begin {
@@ -30,7 +39,7 @@ function Update-ScoopPSManifest {
         $ScoopManifestDir = (Resolve-Path $ScoopManifestDir) -replace '[\\/]$', ''
         Write-Verbose "Inputs:`n$($PSManifestDir)`n$($ScoopManifestDir)"
         $psManifestFile = (Get-ChildItem -Path $PSManifestDir -Filter  *.psd1)[0]
-        $scoopManifestFile = "$ScoopManifestDir\$($psManifestFile.BaseName.ToLower()).json";
+        $scoopManifestFile = "$ScoopManifestDir\$ScoopManifestPrefix$($psManifestFile.BaseName.ToLower()).json";
 
         # Pass only relevant information from the PS Manifest
         function ParseInfoFromManifest {
