@@ -1,18 +1,15 @@
 <#
 .SYNOPSIS
-    Update an existing Scoop Manifest for a psmodule
+    Create or update a Scoop Manifest for a psmodule
 
 .DESCRIPTION
-    Updates a scoop manifest file using data inside
-    the powershell manifest file and newly generated file hashes.
-    The files must exist in the local directoy.
+    Updates a scoop manifest file using data inside the powershell manifest file.
+    Generates normalised file hashes (with LF line endings).
 
 .EXAMPLE
     Update-ScoopPSManifest -PSManifestDir ".\psmodules\Get-Hash\" -ScoopManifestDir ".\bucket\"
 .EXAMPLE
-    Update-ScoopPSManifest -ScoopManifestDir ".\bucket\" -PSManifestDir ".\psmodules\Get-Hash\" -Verbose -WhatIf
-.EXAMPLE
-    Update-ScoopPSManifest -PSManifestDir ".\psmodules\Get-Hash\" -ScoopManifestDir ".\bucket\" -NoNewlineReplace
+    Update-ScoopPSManifest -PSManifestDir ".\psmodules\Get-Hash\" -ScoopManifestDir ".\bucket\" -Verbose -WhatIf
 #>
 function Update-ScoopPSManifest {
     [CmdletBinding(SupportsShouldProcess)]
@@ -48,6 +45,14 @@ function Update-ScoopPSManifest {
             return $result
         }
 
+        function GetHashOfNormalisedFile($filePath) {
+            $fileContent = (Get-Content -Raw $filePath).Replace("`r",'')
+            $byteContent = [System.Text.Encoding]::UTF8.GetBytes($fileContent)
+            $hash = [System.Security.Cryptography.HashAlgorithm]::Create("SHA256").ComputeHash($byteContent)
+            $hashString = [BitConverter]::ToString($hash).Replace('-','')
+            return $hashString.ToLower()
+        }
+
         function UpdateScoopManifest {
             $scoopManifest = @{
                 'homepage'    = ''
@@ -68,13 +73,13 @@ function Update-ScoopPSManifest {
             $scoopManifest.license = $psManifest.license
             $scoopManifest.psmodule.name = $psManifestFile.BaseName
 
-            foreach ($file in (Get-ChildItem -Recurse -Path $PSManifestDir -File)) {
-                $fileHash = git hash-object $file
+            $extensions = @('*.psd1', '*.psm1', '*.ps1', '*.txt')
+            foreach ($file in (Get-ChildItem -Recurse -Path $PSManifestDir -File -Include $extensions)) {
+                $fileHash = GetHashOfNormalisedFile $file
                 $scoopManifest.hash += $fileHash
                 $baseFileDir = $file.Directory.FullName.Replace($PSManifestDir, '').Replace('\', '/')
-                # Example: "https://raw.githubusercontent.com/wookiefriseur/valor-modulis/master/psmodules/NumberConverter/NumberConverter.psd1",
+                # Example: "https://github.com/wookiefriseur/ps_numberconverter/raw/main/NumberConverter.psm1",
                 $fileUrl = "$($scoopManifest.homepage)/raw/main$baseFileDir/$($file.BaseName)$($file.Extension)"
-                # Example: https://github.com/wookiefriseur/ps_numberconverter/raw/main/NumberConverter.psd1
                 $scoopManifest.url += $fileUrl
 
                 Write-Verbose "Generating hash and url for $($file):`n$($fileHash)`n$($fileUrl)"
