@@ -8,9 +8,12 @@ Collection of Powershell modules and scripts for everyday tasks. Use at your own
 
 - add this repository as a bucket
   - `scoop bucket add valor-modulis https://github.com/wookiefriseur/valor-modulis`
+- get a list of modules
+  - all modules share a common prefix to make it easier to identify and find them
+  - `scoop search vm_`
 - install a module
-  - `scoop install HashUtils`
-  - `scoop install valor-modulis/HashUtils` (optional: specify bucket)
+  - `scoop install vm_hashutils`
+  - `scoop install valor-modulis/vm_hashutils` (optional: specify bucket)
 - the module is automatically symlinked to a scoop directory in `$ENV:PSModulePath`
   - autoimport should trigger when you try to use a function from a module (for instance `Get-Hash "Hallo"`)
   - try to use `Import-Module HashUtils` if autoimport fails
@@ -23,6 +26,12 @@ Set-Executionpolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
 
 ## Manually
+
+Not recommended, but you can either clone each module separately or all of them recursively and keep them updated like so:
+
+- `git clone --recurse-submodules`
+- `git pull`
+- `git submodule update --recursive --remote`
 
 After cloning the repository you can add the functions to the current terminal session through:
 
@@ -47,3 +56,21 @@ Use prefixes in case of naming conflicts.
 
 - `Remove-Module Get-Hash` (this will only unload a module)
 - uninstall it in scoop for a more permanent solution
+
+# Troubleshooting
+
+## Bucket not updating
+
+Can happen if the bucket inside `~\scoop` is broken. Easiest way is to just add it again.
+
+1. remove bucket
+2. cleanup
+3. add bucket again
+4. check
+
+```sh
+scoop bucket rm valor-modulis
+scoop cleanup *
+scoop bucket add valor-modulis https://github.com/wookiefriseur/valor-modulis
+scoop search vm_
+```
