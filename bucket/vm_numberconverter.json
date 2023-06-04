@@ -1,17 +1,17 @@
 {
-  "version": "1.0.2",
   "license": "Copyright (c) 2022 Matthäus Falkowski. MIT License.",
   "homepage": "https://github.com/wookiefriseur/ps_numberconverter",
-  "description": "Convert and format numbers to and from widely used bases: binary, octal, hexadecimal",
-  "hash": [
-    "8275f02d51d624e5b806aba34c9789e5bac2a4c39771bbb36220f2f6c3d2f993",
-    "e0c464192422fa91cd1901f3bb4bc721b7a4e5e0fdfd354f3f05c26451f80603"
-  ],
+  "version": "1.0.3",
   "url": [
     "https://github.com/wookiefriseur/ps_numberconverter/raw/main/NumberConverter.psd1",
     "https://github.com/wookiefriseur/ps_numberconverter/raw/main/NumberConverter.psm1"
   ],
+  "description": "Convert and format numbers to and from widely used bases: binary, octal, hexadecimal",
   "psmodule": {
     "name": "NumberConverter"
-  }
+  },
+  "hash": [
+    "6fc332975f218459453e9fa57f8c4ecaf54d35d3243dd4a5c94566cf0e3cca1f",
+    "e0c464192422fa91cd1901f3bb4bc721b7a4e5e0fdfd354f3f05c26451f80603"
+  ]
 }
