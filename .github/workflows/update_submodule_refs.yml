@@ -23,14 +23,10 @@ jobs:
           ref: main
           submodules: recursive
 
-      - name: Init scripts
-        run: |
-          # Update-ScoopPSManifest
-          . .scripts/updateScoopPSManifest.ps1
-
       - name: Update scoop manifests
         id: update_manifests
         run: |
+          . .scripts/updateScoopPSManifest.ps1 # Update-ScoopPSManifest
           $changes = ""
           foreach($module in $(Get-ChildItem -Path .\psmodules\ -Directory)) {
             $modDir = $module.Name
