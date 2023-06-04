@@ -1,8 +1,6 @@
 {
-  "version": "2.0.1",
   "homepage": "https://github.com/wookiefriseur/ps_hashutils",
   "description": "Offers utility commandlets for hashing",
-  "license": "Copyright (c) 2022 Matthäus Falkowski. MIT License.",
   "psmodule": {
     "name": "HashUtils"
   },
@@ -10,8 +8,10 @@
     "https://github.com/wookiefriseur/ps_hashutils/raw/main/HashUtils.psd1",
     "https://github.com/wookiefriseur/ps_hashutils/raw/main/HashUtils.psm1"
   ],
+  "version": "2.0.1",
   "hash": [
     "bed833cb1b8082d389fd203219940381df87c0b1296fdfc1a3849c14b69174a4",
     "069216b5440875dd8a72b3dd262d48de38ccac3b62bc0768ae718d9d40b4bc69"
-  ]
+  ],
+  "license": "Copyright (c) 2022 Matthäus Falkowski. MIT License."
 }
