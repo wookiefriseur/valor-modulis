@@ -105,14 +105,34 @@ function Update-ScoopPSManifest {
       }
 
       $scoopManifestJson = ($scoopManifest | ConvertTo-Json)
-      Write-Verbose -Message "Creating scoop manifest for $($scoopManifest.name)"
+      Write-Verbose -Message "Creating scoop manifest for $($scoopManifest.psmodule.name)"
       if ($PSCmdlet.ShouldProcess($scoopManifestFile, "Create/Overwrite file")) {
         $existingContent = if (Test-Path $scoopManifestFile) { Get-Content $scoopManifestFile -Raw -Encoding UTF8 }
-        if ($existingContent -eq "$scoopManifestJson`n") {
-          Write-Verbose "No changes"
+
+        if(-not $existingContent) {
+          Write-Verbose -Message "manifest does not exist yet, creating new one"
+          New-Item -Force -Path $scoopManifestFile -Value "$scoopManifestJson`n" > $null
+          return $moduleName
+        }
+
+        Write-Verbose -Message "Manifest already exists, checking if there are changes"
+        $parsedCurrent = $existingContent | ConvertFrom-Json
+
+        $unchanged = $true
+        for($i = 0; $i -lt $parsedCurrent.hash.Length; $i++) {
+          if($parsedCurrent.hash[$i] -ne $scoopManifest.hash[$i]) {
+            Write-Verbose -Message "Current : $($parsedCurrent.hash[$i])"
+            Write-Verbose -Message "Manifest: $($scoopManifest.hash[$i])"
+            $unchanged = $false
+            break
+          }
+        }
+
+        if ($unchanged) {
+          Write-Verbose -Message "No changes"
           return ""
         } else {
-          Write-Verbose "Changed $moduleName"
+          Write-Verbose -Message "Changed $moduleName"
           New-Item -Force -Path $scoopManifestFile -Value "$scoopManifestJson`n" > $null
           return $moduleName
         }
