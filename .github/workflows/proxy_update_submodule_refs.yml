@@ -5,11 +5,8 @@ name: ProxyUpdateSubmoduleRefs
 # Triggers the main workflow which will then run with default permissions without endangering tokens.
 
 on:
-  # trustworthy manual dispatch
+  # manual or gh cli dispatch
   workflow_dispatch:
-  # untrustworthy submodule dispatch
-  repository_dispatch:
-    types: [proxy_update]
 
 jobs:
   proxy:
