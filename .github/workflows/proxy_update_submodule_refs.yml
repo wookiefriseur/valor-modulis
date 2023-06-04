@@ -1,0 +1,23 @@
+name: ProxyUpdateSubmoduleRefs
+
+# Proxy or interface for starting the main workflow.
+# Called either manually or from the submodules using a minimal permission PAT.
+# Triggers the main workflow which will then run with default permissions without endangering tokens.
+
+on:
+  # trustworthy manual dispatch
+  workflow_dispatch:
+  # untrustworthy submodule dispatch
+  repository_dispatch:
+    types: [proxy_update]
+
+jobs:
+  proxy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do Nothing
+        run: |
+          echo "   Event: ${{ github.event_name }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "  Action: ${{ github.action }}"
+          echo "   Actor: ${{ github.actor }}"

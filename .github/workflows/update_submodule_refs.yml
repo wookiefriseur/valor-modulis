@@ -1,0 +1,55 @@
+name: UpdateSubmoduleRefs
+
+# 1. updates references to updated submodules
+# 2. updates scoop manifests in the bucket
+
+on:
+  # Run when ProxyUpdateSubmoduleRefs finishes
+  workflow_run:
+    workflows: ["ProxyUpdateSubmoduleRefs"]
+    types:
+      - completed
+
+jobs:
+  update_submodule_refs:
+    # Skip if there was an error
+    if: github.event.workflow_run.conclusion == 'success'
+
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          submodules: recursive
+
+      - name: Init scripts
+        run: |
+          # Update-ScoopPSManifest
+          . .scripts/updateScoopPSManifest.ps1
+
+      - name: Update scoop manifests
+        id: update_manifests
+        run: |
+          $changes = ""
+          foreach($module in $(Get-ChildItem -Path .\psmodules\ -Directory)) {
+            $modDir = $module.Name
+            $changedMod = Update-ScoopPSManifest -ScoopManifestDir ".\bucket\" -PSManifestDir ".\psmodules\$modDir\"
+            if($changedMod.Length -lt 1) { continue }
+            Write-Output "Updating $changedMod"
+            $changes += "$changedMod "
+          }
+          $changes = $changes.Trim()
+          if($changes.Length -lt 1) {
+            throw "🔥 No changes detected, aborting flow! 🔥"
+          }
+          Write-Output "CHANGES=$changes" >> $env:GITHUB_OUTPUT
+
+      - name: Commit the changes
+        run: |
+          git add --all
+          git commit -m "Updated: $CHANGES"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHANGES: ${{ steps.update_manifests.outputs.CHANGES }}
