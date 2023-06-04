@@ -23,8 +23,20 @@ jobs:
           ref: main
           submodules: recursive
       - run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@users.noreply.github.com"
+
+      - name: Update submodules
+        run: |
+          $submodules = Get-Content (Join-Path $PWD ".gitmodules") | `
+          Where-Object { $_ -match 'path' } | `
+          ForEach-Object { ($_ -split '=' | Select-Object -Last 1 | Out-String).Trim() }
+          foreach ($submodule in $submodules) {
+            Push-Location $submodule
+            git fetch
+            git checkout main
+            Pop-Location
+          }
 
       - name: Update scoop manifests
         id: update_manifests
@@ -46,6 +58,7 @@ jobs:
 
       - name: Commit the changes
         run: |
+          git submodule update --remote --recursive
           git add --all
           git commit -m "Updated: $CHANGES"
           git push
