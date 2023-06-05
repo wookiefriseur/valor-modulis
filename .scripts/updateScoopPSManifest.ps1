@@ -93,7 +93,7 @@ function Update-ScoopPSManifest {
 
       # Attach only relevant files to the manifest
       $extensions = @('*.psd1', '*.psm1', '*.ps1')
-      foreach ($file in (Get-ChildItem -Recurse -Path $PSManifestDir -File -Include $extensions)) {
+      foreach ($file in (Get-ChildItem -Recurse -Path $PSManifestDir -File -Include $extensions -Exclude *.Tests.ps1)) {
         $fileHash = GetHashOfNormalisedFile $file
         $scoopManifest.hash += $fileHash
         $baseFileDir = $file.Directory.FullName.Replace($PSManifestDir, '').Replace('\', '/')
