@@ -31,11 +31,21 @@ jobs:
           $submodules = Get-Content (Join-Path $PWD ".gitmodules") | `
           Where-Object { $_ -match 'path' } | `
           ForEach-Object { ($_ -split '=' | Select-Object -Last 1 | Out-String).Trim() }
+          # Get the latest releases
           foreach ($submodule in $submodules) {
             Push-Location $submodule
-            git fetch
-            git checkout main
-            Pop-Location
+            $repo = "$(git config --get remote.origin.url)".Replace("https://github.com/", "").Replace(".git", "")
+            try {
+              $latestRelease = (Invoke-WebRequest -Uri "https://api.github.com/repos/$repo/releases/latest" | ConvertFrom-Json).tag_name
+              if ($latestRelease) {
+                git fetch origin $latestRelease
+                git checkout $latestRelease
+              }
+            } catch {
+              Write-Host "No releases found for $repo or some error occured. Skipping..."
+            } finally {
+              Pop-Location
+            }
           }
 
       - name: Update scoop manifests

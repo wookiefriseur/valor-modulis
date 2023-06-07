@@ -33,9 +33,9 @@ jobs:
           git remote add new_module https://github.com/$REPO
           gh repo set-default $REPO
 
-          gh label create 'version:MAJOR' --color D93F0B --description "Breaking changes (eg. 1.2.3 to 2.0.0)"
-          gh label create 'version:MINOR' --color D93F0B --description "Regular changes (eg. 1.2.3 to 1.3.0)"
-          gh label create 'version:PATCH' --color D93F0B --description "Tiny changes (eg. 1.2.3 to 1.2.4)"
+          gh label create 'version:MAJOR' --color D93F0B --description "Breaking changes (eg. 1.2.3 to 2.0.0)" --force
+          gh label create 'version:MINOR' --color D93F0B --description "Regular changes (eg. 1.2.3 to 1.3.0)" --force
+          gh label create 'version:PATCH' --color D93F0B --description "Tiny changes (eg. 1.2.3 to 1.2.4)" --force
           gh secret set VM_ACTIONS --app actions --body $NEW_REPO_SECRET -R $REPO
 
           echo '{
