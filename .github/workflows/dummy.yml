@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: event infos
         run: |
-          Write-Output ${{ toJson(github.event) }}
+          Write-Output '${{ toJson(github.event) }}'
 
       - name: Step 1 - Set Variables
         id: step1
