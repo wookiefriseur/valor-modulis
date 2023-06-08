@@ -12,7 +12,7 @@ jobs:
         run: |
           Write-Output @"
           $($env:JSON)
-          @"
+          "@
         env:
           JSON: ${{ toJson(github.event) }}
 
