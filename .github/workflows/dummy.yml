@@ -13,8 +13,8 @@ jobs:
         run: |
           $MY_REGULAR_VAR = "regular"
           $env:MY_ENV_VAR = "env"
-          Write-Output "MY_OUTPUT_VAR=output" >> $env:GITHUB_ENV
-          Write-Output "MY_ENV_OUTPUT_VAR=env_output" >> $env:GITHUB_ENV
+          Write-Output "MY_OUTPUT_VAR=output" >> $GITHUB_OUTPUT
+          Write-Output "MY_ENV_OUTPUT_VAR=env_output" >> $env:GITHUB_OUTPUT
 
       - name: Step 2 - Access Variables Directly
         id: step2
@@ -35,7 +35,9 @@ jobs:
       - name: Step 4 - Set and Access Variable in env Part of Step
         id: step4
         run: |
-          Write-Output "MY_STEP_ENV_VAR: $MY_STEP_ENV_VAR"
-          Write-Output "MY_STEP_ENV_VAR: $env:MY_STEP_ENV_VAR"
+          Write-Output "STEP4_ENV_VAR directly: $MY_STEP_ENV_VAR"
+          Write-Output "STEP4_ENV_VAR as ENV: $env:MY_STEP_ENV_VAR"
+          Write-Output "STEP2_OUTPUT_MY_VAR: ${{ steps.step2.outputs.MY_OUTPUT_VAR }}"
+          Write-Output "STEP2_OUTPUT_MY_ENV: ${{ steps.step2.outputs.MY_ENV_OUTPUT_VAR }}"
         env:
-          MY_STEP_ENV_VAR: "step_env"
+          STEP4_ENV_VAR: "step4_env"
