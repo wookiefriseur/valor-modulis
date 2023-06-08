@@ -10,9 +10,11 @@ jobs:
     steps:
       - name: event infos
         run: |
-          Write-Output "$($env:JSON)"
+          Write-Output @"
+          $($env:JSON)
+          @"
         env:
-          JSON: ${{  toJson(github.event) }}
+          JSON: ${{ toJson(github.event) }}
 
       - name: Step 1 - Set Variables
         id: step1
