@@ -31,6 +31,8 @@ jobs:
         run: |
           $MY_REGULAR_VAR = "regular"
           $env:MY_ENV_VAR = "env"
+          Write-Output "✅ MY_ENV_OUTPUT_VAR=env_output" >> $env:GITHUB_OUTPUT
+          Write-Output "❌ MY_OUTPUT_VAR=output" >> $GITHUB_OUTPUT
 
       - name: Each step has separate session
         run: |
