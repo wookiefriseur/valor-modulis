@@ -8,6 +8,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: event infos
+        run: |
+          Write-Output ${{ github.event }}
+
       - name: Step 1 - Set Variables
         id: step1
         run: |
@@ -36,9 +40,9 @@ jobs:
       - name: Step 4 - Set and Access Variable in env Part of Step
         id: step4
         run: |
-          Write-Output "STEP4_ENV_VAR directly: $MY_STEP_ENV_VAR"
-          Write-Output "STEP4_ENV_VAR as ENV: $($env:MY_STEP_ENV_VAR)"
-          Write-Output "STEP1_OUTPUT_MY_VAR: ${{ steps.step1.outputs.MY_OUTPUT_VAR }}"
-          Write-Output "STEP1_OUTPUT_MY_ENV: ${{ steps.step1.outputs.MY_ENV_OUTPUT_VAR }}"
+          Write-Output "STEP4_ENV_VAR directly: $STEP4_ENV_VAR"
+          Write-Output "STEP4_ENV_VAR as ENV: $($env:STEP4_ENV_VAR)"
+          Write-Output "steps.step1.outputs.MY_OUTPUT_VAR: ${{ steps.step1.outputs.MY_OUTPUT_VAR }}"
+          Write-Output "steps.step1.outputs.MY_ENV_OUTPUT_VAR: ${{ steps.step1.outputs.MY_ENV_OUTPUT_VAR }}"
         env:
           STEP4_ENV_VAR: "step4_env"
