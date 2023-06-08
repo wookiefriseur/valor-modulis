@@ -16,21 +16,12 @@ jobs:
         env:
           JSON: ${{ toJson(github.event) }}
 
-      - name: Handling GITHUB_OUTPUT
-        run: |
-          Write-Output "✅ Path of env:GITHUB_OUTPUT: $($env:GITHUB_OUTPUT)"
-          Write-Output "❌ MY_OUTPUT_VAR=output" >> $GITHUB_OUTPUT
-          Write-Output "✅ Content env:GITHUB_OUTPUT:"
-          Get-Content $env:GITHUB_OUTPUT
-          Write-Output "✅ MY_ENV_OUTPUT_VAR=env_output" >> $env:GITHUB_OUTPUT
-          Write-Output "✅ Content env:GITHUB_OUTPUT:"
-          Get-Content $env:GITHUB_OUTPUT
-
       - name: Set Variables
         id: set_vars
         run: |
           $MY_REGULAR_VAR = "regular"
           $env:MY_ENV_VAR = "env"
+          # Handling GITHUB_OUTPUT
           Write-Output "✅ MY_ENV_OUTPUT_VAR=env_output" >> $env:GITHUB_OUTPUT
           Write-Output "❌ MY_OUTPUT_VAR=output" >> $GITHUB_OUTPUT
 
