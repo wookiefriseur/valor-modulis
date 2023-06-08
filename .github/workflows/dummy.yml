@@ -20,9 +20,11 @@ jobs:
         run: |
           Write-Output "✅ Path of env:GITHUB_OUTPUT: $($env:GITHUB_OUTPUT)"
           Write-Output "❌ MY_OUTPUT_VAR=output" >> $GITHUB_OUTPUT
-          Write-Output "✅ Content env:GITHUB_OUTPUT:`n$(Get-Content $env:GITHUB_OUTPUT)"
+          Write-Output "✅ Content env:GITHUB_OUTPUT:"
+          Get-Content $env:GITHUB_OUTPUT
           Write-Output "✅ MY_ENV_OUTPUT_VAR=env_output" >> $env:GITHUB_OUTPUT
-          Write-Output "✅ Content env:GITHUB_OUTPUT:`n$(Get-Content $env:GITHUB_OUTPUT)"
+          Write-Output "✅ Content env:GITHUB_OUTPUT:"
+          Get-Content $env:GITHUB_OUTPUT
 
       - name: Set Variables
         id: set_vars
