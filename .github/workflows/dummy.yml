@@ -8,7 +8,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: event infos
+      - name: Handle large JSON escaping
         run: |
           Write-Output @"
           $($env:JSON)
@@ -16,37 +16,33 @@ jobs:
         env:
           JSON: ${{ toJson(github.event) }}
 
-      - name: Step 1 - Set Variables
-        id: step1
+      - name: Handling GITHUB_OUTPUT
+        run: |
+          Write-Output "✅ Path of env:GITHUB_OUTPUT: $($env:GITHUB_OUTPUT)"
+          Write-Output "❌ MY_OUTPUT_VAR=output" >> $GITHUB_OUTPUT
+          Write-Output "✅ Content env:GITHUB_OUTPUT:`n$(Get-Content $env:GITHUB_OUTPUT)"
+          Write-Output "✅ MY_ENV_OUTPUT_VAR=env_output" >> $env:GITHUB_OUTPUT
+          Write-Output "✅ Content env:GITHUB_OUTPUT:`n$(Get-Content $env:GITHUB_OUTPUT)"
+
+      - name: Set Variables
+        id: set_vars
         run: |
           $MY_REGULAR_VAR = "regular"
           $env:MY_ENV_VAR = "env"
-          Write-Output "❌ MY_OUTPUT_VAR=output" >> $GITHUB_OUTPUT
-          Write-Output "✅ MY_ENV_OUTPUT_VAR=env_output" >> $env:GITHUB_OUTPUT
 
-      - name: Step 2 - Access Variables Directly
-        id: step2
+      - name: Each step has separate session
         run: |
           Write-Output "❌ MY_REGULAR_VAR: $MY_REGULAR_VAR"
-          Write-Output "❌ MY_ENV_VAR: $MY_ENV_VAR"
-          Write-Output "❌ MY_OUTPUT_VAR: $MY_OUTPUT_VAR"
-          Write-Output "❌ MY_ENV_OUTPUT_VAR: $MY_ENV_OUTPUT_VAR"
-
-      - name: Step 3 - Access Variables Through env
-        id: step3
-        run: |
-          Write-Output "❌ MY_REGULAR_VAR: $($env:MY_REGULAR_VAR)"
           Write-Output "❌ MY_ENV_VAR: $($env:MY_ENV_VAR)"
           Write-Output "❌ MY_OUTPUT_VAR: $($env:MY_OUTPUT_VAR)"
           Write-Output "❌ MY_ENV_OUTPUT_VAR: $($env:MY_ENV_OUTPUT_VAR)"
-          Write-Output "✅ Content of env:GITHUB_OUTPUT: $($env:GITHUB_OUTPUT)"
 
-      - name: Step 4 - Set and Access Variable in env Part of Step
-        id: step4
+      - name: Retrieve vars from ENV and Step
+        id: retrieval
         run: |
-          Write-Output "❌ STEP4_ENV_VAR directly: $STEP4_ENV_VAR"
-          Write-Output "✅ STEP4_ENV_VAR as ENV: $($env:STEP4_ENV_VAR)"
-          Write-Output "❌ steps.step1.outputs.MY_OUTPUT_VAR: ${{ steps.step1.outputs.MY_OUTPUT_VAR }}"
-          Write-Output "✅ steps.step1.outputs.MY_ENV_OUTPUT_VAR: ${{ steps.step1.outputs.MY_ENV_OUTPUT_VAR }}"
+          Write-Output "❌ RETRIEVE_ENV_VAR directly: $RETRIEVE_ENV_VAR"
+          Write-Output "✅ RETRIEVE_ENV_VAR from ENV: $($env:RETRIEVE_ENV_VAR)"
+          Write-Output "❌ steps.set_vars.outputs.MY_OUTPUT_VAR: ${{ steps.set_vars.outputs.MY_OUTPUT_VAR }}"
+          Write-Output "✅ steps.set_vars.outputs.MY_ENV_OUTPUT_VAR: ${{ steps.set_vars.outputs.MY_ENV_OUTPUT_VAR }}"
         env:
-          STEP4_ENV_VAR: "step4_env"
+          RETRIEVE_ENV_VAR: "retrieval"
