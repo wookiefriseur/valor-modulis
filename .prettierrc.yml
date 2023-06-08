@@ -1,0 +1,5 @@
+overrides:
+  - files: "*.yml"
+    options:
+      editorconfig: true
+      singleQuote: false

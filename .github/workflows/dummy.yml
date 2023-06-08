@@ -1,0 +1,41 @@
+name: Dummy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dummy_yummy:
+    runs-on: windows-latest
+
+    steps:
+      - name: Step 1 - Set Variables
+        id: step1
+        run: |
+          $MY_REGULAR_VAR = "regular"
+          $env:MY_ENV_VAR = "env"
+          Write-Output "MY_OUTPUT_VAR=output" >> $env:GITHUB_ENV
+          Write-Output "MY_ENV_OUTPUT_VAR=env_output" >> $env:GITHUB_ENV
+
+      - name: Step 2 - Access Variables Directly
+        id: step2
+        run: |
+          Write-Output "MY_REGULAR_VAR: $MY_REGULAR_VAR"
+          Write-Output "MY_ENV_VAR: $MY_ENV_VAR"
+          Write-Output "MY_OUTPUT_VAR: $MY_OUTPUT_VAR"
+          Write-Output "MY_ENV_OUTPUT_VAR: $MY_ENV_OUTPUT_VAR"
+
+      - name: Step 3 - Access Variables Through env
+        id: step3
+        run: |
+          Write-Output "MY_REGULAR_VAR: $env:MY_REGULAR_VAR"
+          Write-Output "MY_ENV_VAR: $env:MY_ENV_VAR"
+          Write-Output "MY_OUTPUT_VAR: $env:MY_OUTPUT_VAR"
+          Write-Output "MY_ENV_OUTPUT_VAR: $env:MY_ENV_OUTPUT_VAR"
+
+      - name: Step 4 - Set and Access Variable in env Part of Step
+        id: step4
+        run: |
+          Write-Output "MY_STEP_ENV_VAR: $MY_STEP_ENV_VAR"
+          Write-Output "MY_STEP_ENV_VAR: $env:MY_STEP_ENV_VAR"
+        env:
+          MY_STEP_ENV_VAR: "step_env"
