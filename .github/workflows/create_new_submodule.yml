@@ -9,8 +9,13 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
+      module_name:
+        description: "Name of the submodule (eg. UrlUtils)"
+        type: string
+        required: true
       repo_name:
-        description: "Name of the new submodule repository"
+        description: "Name of the new repo (eg. ps_urlutils)"
+        type: string
         required: true
 
 jobs:
@@ -21,7 +26,7 @@ jobs:
       - name: Create new submodule repository from template
         run: |
           gh repo create ${{ github.event.inputs.repo_name }} \
-           --template=wookiefriseur/tmplt_ps_submodule \
+           --template=wookiefriseur/template_psmodule \
            --disable-wiki --disable-issues --public
         env:
           GITHUB_TOKEN: ${{ secrets.VM_CREATE_SUBMODULES }}
@@ -61,6 +66,11 @@ jobs:
           NEW_REPO_SECRET: ${{ secrets.VM_ACTIONS }}
           GITHUB_TOKEN: ${{ secrets.VM_CREATE_SUBMODULES }}
 
+  # ToDo:
+  # - don't add/update submodule in here.
+  # - use workflow_call from submodule to update_submodule_refs
+  # - put add_submodule into update_submodule_refs.yml
+
   add_submodule:
     needs: init_repo
     runs-on: ubuntu-latest
@@ -69,23 +79,20 @@ jobs:
       - name: Checkout main repository
         uses: actions/checkout@v3
         with:
-          repository: wookiefriseur/${{ github.event.inputs.repo_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+          submodules: recursive
       - run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@users.noreply.github.com"
 
       - name: Add new submodule
         run: |
-          git submodule add https://github.com/wookiefriseur/${{ github.event.inputs.repo_name }} psmodules/${{ github.event.inputs.repo_name }}
-          git config -f .gitmodules submodule.psmodules/${{ github.event.inputs.repo_name }}.branch main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git submodule add https://github.com/wookiefriseur/${{ github.event.inputs.repo_name }} psmodules/${{ github.event.inputs.module_name }}
+          git config -f .gitmodules submodule.psmodules/${{ github.event.inputs.module_name }}.branch main
 
       - name: Commit changes
         run: |
-          git commit --all --message "new module: ${{ github.event.inputs.repo_name }}"
+          git commit --all --message "new module: ${{ github.event.inputs.module_name }}"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

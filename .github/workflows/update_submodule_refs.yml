@@ -36,13 +36,13 @@ jobs:
             Push-Location $submodule
             $repo = "$(git config --get remote.origin.url)".Replace("https://github.com/", "").Replace(".git", "")
             try {
-              $latestRelease = (Invoke-WebRequest -Uri "https://api.github.com/repos/$repo/releases/latest" | ConvertFrom-Json).tag_name
-              if ($latestRelease) {
-                git fetch origin $latestRelease
-                git checkout $latestRelease
-              }
+              $latestReleaseJson = Invoke-WebRequest -ErrorAction Stop -Uri "https://api.github.com/repos/$repo/releases/latest"
+              $latestRelease = ($latestReleaseJson | ConvertFrom-Json -ErrorAction Stop).tag_name
+              if ($latestRelease -eq $null) { throw "No release" }
+              git fetch origin $latestRelease
+              git checkout $latestRelease
             } catch {
-              Write-Host "No releases found for $repo or some error occured. Skipping..."
+              Write-Host "⚠️ Skipping $repo . No release or error: $_"
             } finally {
               Pop-Location
             }
@@ -68,10 +68,8 @@ jobs:
 
       - name: Commit the changes
         run: |
-          git submodule update --remote --recursive
           git add --all
-          git commit -m "Updated: $CHANGES"
+          git commit -m "Updated: ${{ steps.update_manifests.outputs.CHANGES }}"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CHANGES: ${{ steps.update_manifests.outputs.CHANGES }}
