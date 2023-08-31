@@ -31,6 +31,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.VM_CREATE_SUBMODULES }}
 
+      - name: Checkout new repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repo_name }}
+          token: ${{ secrets.VM_CREATE_SUBMODULES }}
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Initialize module
+        run: ./init-module.ps1 ${{ github.event.inputs.module_name }}
+
+      - name: Commit and push changes
+        run: |
+          git add .
+          git commit -m "Initialize module"
+          git push
+
       - name: Edit new repository settings
         run: |
           REPO=wookiefriseur/${{ github.event.inputs.repo_name }}
@@ -41,58 +59,23 @@ jobs:
           gh label create 'version:MAJOR' --color D93F0B --description "Breaking changes (eg. 1.2.3 to 2.0.0)" --force
           gh label create 'version:MINOR' --color D93F0B --description "Regular changes (eg. 1.2.3 to 1.3.0)" --force
           gh label create 'version:PATCH' --color D93F0B --description "Tiny changes (eg. 1.2.3 to 1.2.4)" --force
+          gh label create 'actions:RELEASE' --color FBCA04 --description "Trigger Release actions upon merge" --force
           gh secret set VM_ACTIONS --app actions --body $NEW_REPO_SECRET -R $REPO
 
           echo '{
             "enforce_admins": false,
             "restrictions": null,
-            "required_pull_request_reviews": {
-                "dismiss_stale_reviews": false,
-                "require_code_owner_reviews": true,
-                "required_approving_review_count": 0,
-                "require_last_push_approval": false
-            },
+            "required_pull_request_reviews": null,
             "required_status_checks": {
                 "strict": true,
                 "contexts": ["run_tests"]
             }
-          }' > payload.json
+          }' > .payload.json
 
           gh api /repos/'{owner}'/'{repo}'/branches/main/protection \
            -H "Accept: application/vnd.github+json" \
            -H "X-GitHub-Api-Version: 2022-11-28" \
-           --method PUT --input payload.json
+           --method PUT --input .payload.json
         env:
           NEW_REPO_SECRET: ${{ secrets.VM_ACTIONS }}
           GITHUB_TOKEN: ${{ secrets.VM_CREATE_SUBMODULES }}
-
-  # ToDo:
-  # - don't add/update submodule in here.
-  # - use workflow_call from submodule to update_submodule_refs
-  # - put add_submodule into update_submodule_refs.yml
-
-  add_submodule:
-    needs: init_repo
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout main repository
-        uses: actions/checkout@v3
-        with:
-          ref: main
-          submodules: recursive
-      - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Add new submodule
-        run: |
-          git submodule add https://github.com/wookiefriseur/${{ github.event.inputs.repo_name }} psmodules/${{ github.event.inputs.module_name }}
-          git config -f .gitmodules submodule.psmodules/${{ github.event.inputs.module_name }}.branch main
-
-      - name: Commit changes
-        run: |
-          git commit --all --message "new module: ${{ github.event.inputs.module_name }}"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
